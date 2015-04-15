@@ -13,4 +13,4 @@ class Rice(models.Model):
    pic4 = models.URLField()
    author = models.URLField()
    upstream = models.URLField()
-   version - models.CharField(max_length=50)
+   version = models.CharField(max_length=50)
