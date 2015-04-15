@@ -5,6 +5,7 @@ urlpatterns = [
     # Examples:
     # url(r'^$', 'rbe.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', include('polls.urls')),
 ]
