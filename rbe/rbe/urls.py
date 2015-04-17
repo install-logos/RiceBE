@@ -8,4 +8,5 @@ urlpatterns = [
     
     url(r'^admin/', include(admin.site.urls)),
     url(r'^query/', include('query.urls')),
+    url(r'^upload/', include('upload.urls')),
 ]
