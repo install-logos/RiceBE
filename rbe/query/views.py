@@ -24,4 +24,4 @@ class QuerySearchView(View):
 		if query_obj:
 			response = prep_search_results(query_obj)
 			return JsonResponse(response, safe=False)
-		return HttpResponse("No Result Found for %s" % search_string)
+		return JsonResponse([], safe=False)
