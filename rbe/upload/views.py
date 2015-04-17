@@ -1,6 +1,5 @@
-import pdb; 
-
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
@@ -8,7 +7,6 @@ from django.db.models import Q
 # Need to import models from Query
 # from .models import Package
 
-pdb.set_trace()
 
 class UploadView(View):
 	"""
