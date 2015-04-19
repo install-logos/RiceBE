@@ -63,7 +63,8 @@ class UploadManager(object):
 		# TODO: figure out how we want this to behave in that case
 		uploaded_package = Package(**upload_data)
 		uploaded_package.save()
-		uploaded_package['success'] = "Package uploaded successfully!"
+		
+		uploaded_response['success'] = "Package uploaded successfully!"
 		
 		# Clean up files
 		for name in z.namelist():
