@@ -1,5 +1,5 @@
 """Handle Uploads from client"""
-import os, urllib2, json, zipfile
+import os, urllib2, json, zipfile, shutil
 from rice_verify import checkSpam, checkPlagarism
 from query.models import Package
 
@@ -23,11 +23,9 @@ class UploadManager(object):
 		if not (os.path.exists(temp) and zipfile.is_zipfile(temp)):
 			upload_response['error'] = "BAD URL or Zipfile"
 			return upload_response
-		print("Downloaded file")
 
 		z = zipfile.ZipFile(temp)
 
-		print("Unzipping file")
  		for name in z.namelist():
 			z.extract(name, PACKAGE_DIR + "temp/")
 
@@ -43,8 +41,6 @@ class UploadManager(object):
 		
 		
 		if INFO_FILE not in os.listdir('.'):
-			print(os.listdir('.'))
-			print('info file missing')
 			upload_response['error'] = 'Missing package metadata'
 			return upload_response
 		# if checkSpam():
@@ -58,16 +54,16 @@ class UploadManager(object):
 		# create and save the package
 		with open(INFO_FILE) as f:
 			upload_data = json.loads("".join(f.readlines()))
-		print(json.dumps(upload_data))
 		# this could fail if they pass some bad data
 		# TODO: figure out how we want this to behave in that case
 		uploaded_package = Package(**upload_data)
 		uploaded_package.save()
-		
-		uploaded_response['success'] = "Package uploaded successfully!"
+		upload_response['success'] = "Package uploaded successfully!"
 		
 		# Clean up files
-		for name in z.namelist():
-			os.remove(PACKAGE_DIR + "temp/" + name)
+		os.chdir('..')
+		shutil.rmtree('temp')
+		os.mkdir('temp')
+		os.chdir('..')
 
 		return upload_response
