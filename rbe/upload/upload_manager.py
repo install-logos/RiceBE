@@ -29,13 +29,13 @@ class UploadManager(object):
  		for name in z.namelist():
 			z.extract(name, PACKAGE_DIR + "temp/")
 
-		if checkSpam():
-			upload_response['error'] = 'Package is SPAM'
-			return upload_response
+		# if checkSpam():
+		#	upload_response['error'] = 'Package is SPAM'
+		#	return upload_response
 
-		if checkPlagiarism():
-			upload_response['error'] = 'Package is Plagiarism'
-			return upload_response
+		# if checkPlagiarism():
+		#	upload_response['error'] = 'Package is Plagiarism'
+		#	return upload_response
 
 		# create and save the package
 		with open(INFO_FILE) as f:
