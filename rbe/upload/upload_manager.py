@@ -41,7 +41,11 @@ class UploadManager(object):
 		
 		
 		if INFO_FILE not in os.listdir('.'):
+			os.chdir('..')
 			upload_response['error'] = 'Missing package metadata'
+			shutil.rmtree('temp')
+			os.mkdir('temp')
+			os.chdir('..')
 			return upload_response
 		# if checkSpam():
 		#	upload_response['error'] = 'Package is SPAM'
