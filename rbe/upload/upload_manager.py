@@ -1,5 +1,5 @@
 """Handle Uploads from client"""
-import os, urllib2, json, zipfile, shutil
+import os, urllib2, json, zipfile, shutil, subprocess
 from rice_verify import checkSpam, checkPlagarism
 from query.models import Package
 
@@ -15,33 +15,16 @@ class UploadManager(object):
 
 	def upload(self):
 		upload_response = {}
-		temp = PACKAGE_DIR + "temp.zip"
-		uopener = urllib2.urlopen(self.upstream_url)
-		data = uopener.read()
-		with open(temp,"wb") as fout:
-			fout.write(data)
-		if not (os.path.exists(temp) and zipfile.is_zipfile(temp)):
-			upload_response['error'] = "BAD URL or Zipfile"
-			return upload_response
-
-		z = zipfile.ZipFile(temp)
-
- 		for name in z.namelist():
-			z.extract(name, PACKAGE_DIR + "temp/")
-
-		os.chdir(PACKAGE_DIR + "temp")
-		path_files = os.listdir('.')
- 		if len(path_files) == 1 and os.path.isdir(path_files[0]):
-            		os.chdir(path_files[0])
-            		for f in os.listdir('.'):
-                		os.rename('./'+f,'../'+f)
-        		os.chdir('../')
-       			os.rmdir(path_files[0])
-	
-		
+		temp = PACKAGE_DIR + "temp"
+		subprocess.call(["git","clone",self.upstream_url,temp])
+		os.chdir(temp)
 		
 		if INFO_FILE not in os.listdir('.'):
+			os.chdir('..')
 			upload_response['error'] = 'Missing package metadata'
+			shutil.rmtree('temp')
+			os.mkdir('temp')
+			os.chdir('..')
 			return upload_response
 		# if checkSpam():
 		#	upload_response['error'] = 'Package is SPAM'
